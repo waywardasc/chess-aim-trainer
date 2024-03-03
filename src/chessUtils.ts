@@ -12,7 +12,7 @@ function getPieceType(piece: string) {
 }
 
 function FENPieceToString(pieceChar: string) {
-  let piece = pieceChar.toLowerCase() === pieceChar ? 'white' : 'black';
+  let piece = pieceChar.toUpperCase() === pieceChar ? 'white' : 'black';
   piece += '-' + getPieceType(pieceChar.toLowerCase());
   return piece;
 }
@@ -20,7 +20,7 @@ function FENPieceToString(pieceChar: string) {
 export default function FENToMatrix(fen: string) {
   let grid: string[][] = [];
   let parts = fen.split(' ');
-  const turn: string = parts[1] === 'w' ? 'white' : 'black';
+  const turn: string = parts[1][0] === 'w' ? 'white' : 'black';
   const rows: string[] = parts[0].split('/');
 
   for (let row of rows) {
@@ -34,8 +34,19 @@ export default function FENToMatrix(fen: string) {
         currentRow.push(FENPieceToString(character));
       }
     }
+
+    if (turn === 'black') {
+      currentRow.reverse();
+    }
+
     grid.push(currentRow);
   }
+
+  if (turn === 'black') {
+    grid.reverse();
+  }
+
+  // grid[0][0] corresponds to the a1 square if turn is white, else h8.
 
   return { turn: turn, grid: grid };
 }
