@@ -1,11 +1,15 @@
-import './App.css';
-import FENToMatrix from './chessUtils';
-import Board from './components/Board';
+import Game from './components/Game';
+import './index.css';
 import './styles/chess.css';
 
+// Appelez la fonction asynchrone pour récupérer un élément aléatoire
 function App() {
-  let props = FENToMatrix('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b');
-  return <Board turn={props.turn} grid={props.grid} />;
+  return (
+    <>
+      <Game />
+      <h1 className="text-cyan-200">Oui</h1>
+    </>
+  );
 }
 
 export default App;

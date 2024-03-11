@@ -11,10 +11,44 @@ function getPieceType(piece: string) {
   return pieceMap[piece.toLowerCase()] || '';
 }
 
-function FENPieceToString(pieceChar: string) {
+function pieceToString(pieceChar: string) {
   let piece = pieceChar.toUpperCase() === pieceChar ? 'white' : 'black';
   piece += '-' + getPieceType(pieceChar.toLowerCase());
   return piece;
+}
+
+export function translateMove(move: string, grid: string[][], turn: string) {
+  if (!move) {
+    return move;
+  }
+
+  let translatedMove = '';
+  let [beg, end] = [move.slice(0, 2), move.slice(2, 4)];
+
+  let colBeg = beg[0].charCodeAt(0) - 'a'.charCodeAt(0);
+  let rowBeg = parseInt(beg[1]) - 1;
+
+  let colEnd = end[0].charCodeAt(0) - 'a'.charCodeAt(0);
+  let rowEnd = parseInt(end[1]) - 1;
+
+  if (turn === 'black') {
+    colBeg = 7 - colBeg;
+    colEnd = 7 - colEnd;
+  } else {
+    rowBeg = 7 - rowBeg;
+    rowEnd = 7 - rowEnd;
+  }
+  let start = grid[rowBeg][colBeg].split('-')[1];
+  if (start === 'knight') translatedMove += 'N';
+  else if (start !== 'pawn') translatedMove += start[0].toUpperCase();
+
+  let dest = grid[rowEnd][colEnd];
+
+  if (dest.length) translatedMove += 'x';
+
+  translatedMove += end;
+
+  return translatedMove;
 }
 
 export default function FENToMatrix(fen: string) {
@@ -31,7 +65,7 @@ export default function FENToMatrix(fen: string) {
           currentRow.push('');
         }
       } else {
-        currentRow.push(FENPieceToString(character));
+        currentRow.push(pieceToString(character));
       }
     }
 

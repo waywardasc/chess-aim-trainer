@@ -13,6 +13,7 @@ export default function Piece(props: PieceProps) {
       className={`piece ${props.color} ${props.piece}`}
       alt={`${props.color} ${props.piece}`}
       style={{ left: `${x}%`, top: `${y}%` }}
+      draggable={true}
     />
   );
 }
